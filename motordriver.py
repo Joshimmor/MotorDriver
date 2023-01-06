@@ -1,8 +1,8 @@
 from time import sleep
-import RPi.gpio as gpio
+import RPi.GPIO as gpio
 
 class motordriver:
-    def __init__(self,pul,_dir,ena):
+    def __init__(self,pul:int,_dir:int,ena:int):
         self.pul = pul
         self.dir = _dir
         self.ena = ena
@@ -14,9 +14,9 @@ class motordriver:
     # 200 microsteps is on full rotation 
     # currently using a 25:1 gear ratio
     # estimated Position is entered in degrees
-    def position_delta(self,estimated_position:float):float:
+    def position_delta(self,estimated_position:int)->int:
         # how many step required to make move
-        estimated_position_steps = (estimated_position/1.8) *   25
+        estimated_position_steps = int((estimated_position/1.8) *   25)
         # moving in the "positive" direction
         if(estimated_position >= 0):
             motor_max_delta = self.max_position - self.current_position
@@ -42,7 +42,7 @@ class motordriver:
                 self.current_position = 0
                 return motor_max_delta
     # movement request
-    def motor_movement(self,estimated_position:):
+    def motor_movement(self,estimated_position:int):
         # set pins
         gpio.setmode(gpio.BCM)
         gpio.setup(self.pul, gpio.OUT)
